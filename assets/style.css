@@ -678,23 +678,79 @@ h1.font-manrope { letter-spacing: -0.045em; }
   .hero-fcard-auto { bottom: 16%; left: 0; width: 212px; }
 }
 
-/* mobile: keep portrait + show only the two most essential floats */
+/* mobile: portrait becomes inline-flow, sits directly under CTAs,
+   proof row drops below portrait. One connected section. */
 @media (max-width: 640px) {
-  .hero-stage { min-height: 500px; margin-top: 20px; }
+  /* tight outer padding (overrides Tailwind py-14) */
+  .hero-v2 .max-w-7xl {
+    padding-top: 1rem;
+    padding-bottom: 0.5rem;
+  }
+  /* tight gap between text column, portrait, and mobile proof row */
+  .hero-v2 .grid { gap: 0.5rem; }
+
+  /* stage no longer a positioned canvas — it auto-sizes to the portrait */
+  .hero-stage {
+    min-height: 0;
+    height: auto;
+    margin-top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+  }
+  /* kill atmospheric layers + every floating card on mobile for clean focus */
   .hero-stage-orbit,
   .hero-stage-grid,
-  .hero-fcard-notif { display: none; }
-  .hero-portrait { right: 0; width: 100%; }
-  .hero-portrait img { height: 100%; }
-  .hero-fcard-id { top: 2%; left: 0; padding: 7px 11px 7px 7px; }
-  .hero-fcard-id-avatar { width: 28px; height: 28px; font-size: 11px; }
-  .hero-fcard-id-name { font-size: 12px; }
-  .hero-fcard-id-role { font-size: 10px; }
-  .hero-fcard-stats { top: 0; right: 0; width: 150px; padding: 10px 12px 8px; }
-  .hero-fcard-stats-value { font-size: 20px; }
-  .hero-fcard-auto { bottom: 4%; left: 0; width: 200px; padding: 9px 12px 9px 9px; }
-  .hero-fcard-auto-title { font-size: 12px; }
-  .hero-fcard-auto-meta { font-size: 10.5px; }
+  .hero-stage-rim,
+  .hero-stage-spot,
+  .hero-portrait-ground,
+  .hero-fcard { display: none; }
+  /* keep one soft glow behind portrait for depth */
+  .hero-stage-glow {
+    inset: -10% -10%;
+    filter: blur(40px);
+    opacity: 0.7;
+  }
+
+  /* portrait is now flow-positioned, capped 460px tall, full body visible */
+  .hero-portrait {
+    position: relative;
+    inset: auto;
+    right: auto;
+    left: auto;
+    top: auto;
+    bottom: auto;
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+  }
+  .hero-portrait img {
+    max-height: 460px;
+    height: auto;
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
+    object-position: bottom center;
+    /* lighter rim filters on mobile for crispness on small screens */
+    filter:
+      drop-shadow(-12px 4px 22px rgba(15,139,255,0.42))
+      drop-shadow(10px 14px 22px rgba(0,0,0,0.55))
+      contrast(1.04) saturate(1.04);
+  }
+
+  /* mobile proof row sits right below the portrait with breathing room */
+  [data-mobile-proof] {
+    padding-top: 0.75rem;
+    margin-top: 0.25rem;
+  }
+}
+
+/* extra-tight viewport (small phones, Messenger in-app browser) */
+@media (max-width: 400px) {
+  .hero-v2 .max-w-7xl { padding-top: 0.75rem; }
+  .hero-portrait img { max-height: 420px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

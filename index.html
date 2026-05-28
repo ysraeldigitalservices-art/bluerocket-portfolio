@@ -138,8 +138,8 @@
               </a>
             </div>
 
-            <!-- social proof -->
-            <div class="hero-v2-proof">
+            <!-- social proof (desktop / tablet position — hidden on mobile) -->
+            <div class="hero-v2-proof !hidden sm:!flex">
               <div class="hero-v2-proof-row">
                 <span class="hero-v2-proof-dot hero-v2-proof-dot-1"></span>
                 <span class="hero-v2-proof-dot hero-v2-proof-dot-2"></span>
@@ -234,6 +234,19 @@
             </div>
 
           </div><!-- /hero-stage -->
+
+          <!-- social proof (mobile-only position — sits below the portrait) -->
+          <div class="hero-v2-proof !flex sm:!hidden" data-mobile-proof>
+            <div class="hero-v2-proof-row">
+              <span class="hero-v2-proof-dot hero-v2-proof-dot-1"></span>
+              <span class="hero-v2-proof-dot hero-v2-proof-dot-2"></span>
+              <span class="hero-v2-proof-dot hero-v2-proof-dot-3"></span>
+              <span class="hero-v2-proof-dot hero-v2-proof-dot-4"></span>
+            </div>
+            <p class="hero-v2-proof-text">
+              <span class="hero-v2-proof-strong">8 years</span> building systems for coaches, agencies &amp; businesses
+            </p>
+          </div>
         </div>
       </div>
     </section>
