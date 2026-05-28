@@ -678,8 +678,8 @@ h1.font-manrope { letter-spacing: -0.045em; }
   .hero-fcard-auto { bottom: 16%; left: 0; width: 212px; }
 }
 
-/* mobile hero: portrait inline-flow, two value cards floated compactly,
-   proof row drops below portrait. One connected hero. */
+/* mobile hero: portrait inline-flow, all four desktop floating cards
+   shown on mobile (KA badge, stats, notif, workflow), sized to fit. */
 @media (max-width: 640px) {
   /* tight outer padding */
   .hero-v2 .max-w-7xl {
@@ -695,14 +695,12 @@ h1.font-manrope { letter-spacing: -0.045em; }
     height: auto;
     margin-top: 0;
   }
-  /* hide expensive atmospheric layers + decorative cards on mobile */
+  /* hide expensive atmospheric layers, KEEP all four floating cards */
   .hero-stage-orbit,
   .hero-stage-grid,
   .hero-stage-rim,
   .hero-stage-spot,
-  .hero-portrait-ground,
-  .hero-fcard-id,
-  .hero-fcard-notif { display: none; }
+  .hero-portrait-ground { display: none; }
   /* keep one soft glow for depth */
   .hero-stage-glow { inset: -10% -10%; filter: blur(40px); opacity: 0.7; }
 
@@ -728,9 +726,20 @@ h1.font-manrope { letter-spacing: -0.045em; }
       contrast(1.04) saturate(1.04);
   }
 
-  /* two value-conveying floating cards stay visible, repositioned tight */
+  /* KA identity badge — top-left, compact */
+  .hero-fcard-id {
+    top: 6px;
+    left: 4px;
+    padding: 7px 11px 7px 7px;
+    animation: none;
+  }
+  .hero-fcard-id-avatar { width: 28px; height: 28px; font-size: 11px; }
+  .hero-fcard-id-name { font-size: 12px; }
+  .hero-fcard-id-role { font-size: 10px; }
+
+  /* Pipeline stats — top-right, compact */
   .hero-fcard-stats {
-    top: 4px;
+    top: 6px;
     right: 4px;
     width: 140px;
     padding: 9px 11px 7px;
@@ -738,8 +747,21 @@ h1.font-manrope { letter-spacing: -0.045em; }
   }
   .hero-fcard-stats-value { font-size: 18px; }
   .hero-fcard-stats-spark { height: 22px; }
+
+  /* New lead notif — mid-left, compact */
+  .hero-fcard-notif {
+    top: 38%;
+    left: 0;
+    width: 200px;
+    padding: 9px 11px 9px 9px;
+    animation: none;
+  }
+  .hero-fcard-notif-title { font-size: 11.5px; }
+  .hero-fcard-notif-meta { font-size: 10px; }
+
+  /* Workflow status — bottom-left, compact */
   .hero-fcard-auto {
-    bottom: 4px;
+    bottom: 6px;
     left: 4px;
     width: 170px;
     padding: 9px 11px 9px 9px;
@@ -756,7 +778,12 @@ h1.font-manrope { letter-spacing: -0.045em; }
 @media (max-width: 400px) {
   .hero-v2 .max-w-7xl { padding-top: 0.75rem; }
   .hero-portrait img { max-height: 420px; }
-  .hero-fcard-stats { width: 130px; }
+  .hero-fcard-id { padding: 6px 9px 6px 6px; }
+  .hero-fcard-id-avatar { width: 26px; height: 26px; font-size: 10px; }
+  .hero-fcard-id-name { font-size: 11px; }
+  .hero-fcard-stats { width: 128px; padding: 8px 10px 6px; }
+  .hero-fcard-stats-value { font-size: 16px; }
+  .hero-fcard-notif { width: 180px; }
   .hero-fcard-auto { width: 156px; }
 }
 
@@ -2073,71 +2100,8 @@ footer.bg-br-blue-900::after,
   .hero-v2-btn-secondary { transition: none; }
 }
 
-/* ============================================
-   Mobile-only founder identity card (≤768px)
-   Hidden on desktop. Styled under both .mobile-founder-card AND
-   .hero-fcard-mobile-id so either class binds the rule.
-   ============================================ */
+/* Earlier mobile-only founder card was a workaround when the four original
+   floating cards were hidden on mobile. Now that the four desktop cards
+   render on mobile, this card is no longer needed. */
 .mobile-founder-card,
-.hero-fcard-mobile-id { display: none; }
-
-@media (max-width: 768px) {
-  /* free up bottom-left space so the new id card can center cleanly */
-  .hero-fcard-auto { display: none; }
-
-  .mobile-founder-card,
-  .hero-fcard-mobile-id {
-    display: flex !important;
-    align-items: center;
-    gap: 12px;
-    position: absolute;
-    left: 50%;
-    bottom: 28px;
-    transform: translateX(-50%);
-    z-index: 30;
-    width: 78%;
-    max-width: 360px;
-    padding: 14px 18px;
-    border-radius: 18px;
-    /* opaque enough that the card is visible even if backdrop-filter is ignored */
-    background: rgba(10, 18, 40, 0.88);
-    backdrop-filter: blur(16px) saturate(160%);
-    -webkit-backdrop-filter: blur(16px) saturate(160%);
-    border: 1.5px solid rgba(59, 130, 246, 0.55);
-    box-shadow:
-      0 0 36px rgba(37, 99, 235, 0.55),
-      0 12px 28px -10px rgba(0, 0, 0, 0.6),
-      inset 0 1px 0 rgba(255, 255, 255, 0.14);
-    color: #fff;
-    pointer-events: none;
-    animation: mobileIdFloat 6.5s ease-in-out infinite;
-    will-change: transform;
-  }
-  .mobile-founder-card .hero-fcard-id-avatar,
-  .hero-fcard-mobile-id .hero-fcard-id-avatar {
-    width: 36px;
-    height: 36px;
-    font-size: 13px;
-    flex-shrink: 0;
-  }
-  .mobile-founder-card .hero-fcard-id-name,
-  .hero-fcard-mobile-id .hero-fcard-id-name {
-    font-size: 14px;
-    font-weight: 700;
-  }
-  .mobile-founder-card .hero-fcard-id-role,
-  .hero-fcard-mobile-id .hero-fcard-id-role {
-    font-size: 11px;
-    color: rgba(255, 255, 255, 0.7);
-  }
-}
-
-@keyframes mobileIdFloat {
-  0%, 100% { transform: translateX(-50%) translateY(0); }
-  50%      { transform: translateX(-50%) translateY(-5px); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .mobile-founder-card,
-  .hero-fcard-mobile-id { animation: none; }
-}
+.hero-fcard-mobile-id { display: none !important; }
