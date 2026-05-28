@@ -678,48 +678,39 @@ h1.font-manrope { letter-spacing: -0.045em; }
   .hero-fcard-auto { bottom: 16%; left: 0; width: 212px; }
 }
 
-/* mobile: portrait becomes inline-flow, sits directly under CTAs,
-   proof row drops below portrait. One connected section. */
+/* mobile hero: portrait inline-flow, two value cards floated compactly,
+   proof row drops below portrait. One connected hero. */
 @media (max-width: 640px) {
-  /* tight outer padding (overrides Tailwind py-14) */
+  /* tight outer padding */
   .hero-v2 .max-w-7xl {
     padding-top: 1rem;
     padding-bottom: 0.5rem;
   }
-  /* tight gap between text column, portrait, and mobile proof row */
   .hero-v2 .grid { gap: 0.5rem; }
 
-  /* stage no longer a positioned canvas — it auto-sizes to the portrait */
+  /* stage keeps relative positioning so floating cards can anchor to it */
   .hero-stage {
+    position: relative;
     min-height: 0;
     height: auto;
     margin-top: 0;
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
   }
-  /* kill atmospheric layers + every floating card on mobile for clean focus */
+  /* hide expensive atmospheric layers + decorative cards on mobile */
   .hero-stage-orbit,
   .hero-stage-grid,
   .hero-stage-rim,
   .hero-stage-spot,
   .hero-portrait-ground,
-  .hero-fcard { display: none; }
-  /* keep one soft glow behind portrait for depth */
-  .hero-stage-glow {
-    inset: -10% -10%;
-    filter: blur(40px);
-    opacity: 0.7;
-  }
+  .hero-fcard-id,
+  .hero-fcard-notif { display: none; }
+  /* keep one soft glow for depth */
+  .hero-stage-glow { inset: -10% -10%; filter: blur(40px); opacity: 0.7; }
 
-  /* portrait is now flow-positioned, capped 460px tall, full body visible */
+  /* portrait inline-flow, capped at 460px, full body via object-fit: contain */
   .hero-portrait {
     position: relative;
     inset: auto;
-    right: auto;
-    left: auto;
-    top: auto;
-    bottom: auto;
+    right: auto; left: auto; top: auto; bottom: auto;
     width: 100%;
     height: auto;
     display: flex;
@@ -728,29 +719,130 @@ h1.font-manrope { letter-spacing: -0.045em; }
   }
   .hero-portrait img {
     max-height: 460px;
-    height: auto;
-    width: auto;
-    max-width: 100%;
+    height: auto; width: auto; max-width: 100%;
     object-fit: contain;
     object-position: bottom center;
-    /* lighter rim filters on mobile for crispness on small screens */
     filter:
       drop-shadow(-12px 4px 22px rgba(15,139,255,0.42))
       drop-shadow(10px 14px 22px rgba(0,0,0,0.55))
       contrast(1.04) saturate(1.04);
   }
 
-  /* mobile proof row sits right below the portrait with breathing room */
-  [data-mobile-proof] {
-    padding-top: 0.75rem;
-    margin-top: 0.25rem;
+  /* two value-conveying floating cards stay visible, repositioned tight */
+  .hero-fcard-stats {
+    top: 4px;
+    right: 4px;
+    width: 140px;
+    padding: 9px 11px 7px;
+    animation: none;
   }
+  .hero-fcard-stats-value { font-size: 18px; }
+  .hero-fcard-stats-spark { height: 22px; }
+  .hero-fcard-auto {
+    bottom: 4px;
+    left: 4px;
+    width: 170px;
+    padding: 9px 11px 9px 9px;
+    animation: none;
+  }
+  .hero-fcard-auto-title { font-size: 11.5px; }
+  .hero-fcard-auto-meta { font-size: 10.5px; }
+
+  /* mobile proof row breathing space below portrait */
+  [data-mobile-proof] { padding-top: 0.75rem; margin-top: 0.25rem; }
 }
 
 /* extra-tight viewport (small phones, Messenger in-app browser) */
 @media (max-width: 400px) {
   .hero-v2 .max-w-7xl { padding-top: 0.75rem; }
   .hero-portrait img { max-height: 420px; }
+  .hero-fcard-stats { width: 130px; }
+  .hero-fcard-auto { width: 156px; }
+}
+
+/* ============================================
+   Mobile (≤768px) — site-wide vertical compaction
+   Desktop (≥769px) is NOT affected by any rule below.
+   ============================================ */
+@media (max-width: 768px) {
+  /* section vertical padding sweep */
+  section.py-20 { padding-top: 3rem; padding-bottom: 3rem; }
+  section.py-16 { padding-top: 2.75rem; padding-bottom: 2.75rem; }
+  section.py-10 { padding-top: 2rem; padding-bottom: 2rem; }
+  footer.pt-16 { padding-top: 2.5rem; }
+
+  /* inner heading + intro margins */
+  section .mb-24 { margin-bottom: 2.5rem; }
+  section .mb-16 { margin-bottom: 2rem; }
+  section .mb-14 { margin-bottom: 1.75rem; }
+  section .mb-12 { margin-bottom: 1.5rem; }
+
+  /* grid gaps inside sections */
+  section .gap-16 { gap: 1.75rem; }
+  section .gap-12 { gap: 1.5rem; }
+  section .gap-10 { gap: 1.25rem; }
+
+  /* generic card padding trim */
+  section .p-8 { padding: 1.5rem; }
+}
+
+/* ============================================
+   Mobile (≤768px) — scroll performance fixes
+   Disable expensive properties that wreck scroll FPS on phones.
+   Visual look stays effectively identical.
+   ============================================ */
+@media (max-width: 768px) {
+  /* horizontal overflow guard — prevents the "shaky" sideways jitter */
+  html, body {
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
+  }
+
+  /* kill film grain overlay on dark sections (mix-blend-mode is one of the
+     heaviest scroll-cost properties on mobile GPUs) */
+  section.bg-br-blue-900::after,
+  footer.bg-br-blue-900::after,
+  .hero-v2::after { display: none; }
+
+  /* disable backdrop-filter blurs on glass surfaces — single biggest mobile
+     perf killer. Replace with slightly more opaque solid bg so they still
+     read as glass cards */
+  #siteHeader {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background-color: rgba(255, 255, 255, 0.96);
+  }
+  .hero-fcard {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: linear-gradient(180deg, rgba(22,28,55,0.95) 0%, rgba(10,15,35,0.95) 100%);
+  }
+  .trust-card {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  .hero-v2-btn-secondary {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  /* stop continuous animations that animate filter/transform on blurred or
+     large elements — these repaint every frame during scroll */
+  .hero-mesh-1, .hero-mesh-2 { animation: none; }
+  .hero-stage-orbit-ring { animation: none; }
+  .hero-v2-pill-dot::after { animation: none; }
+  .hero-fcard-pulse::after { animation: none; }
+  .hero-fcard-stats-line { animation: none; stroke-dashoffset: 0; }
+
+  /* belt-and-braces: prevent any wide element from forcing horizontal scroll */
+  .hero-v2,
+  section,
+  footer { max-width: 100vw; }
+
+  /* extra safety: avoid 100vh quirks on mobile browsers where the URL bar
+     collapse changes vh and causes visible jump on scroll */
+  .hero-v2 { min-height: auto; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1979,4 +2071,73 @@ footer.bg-br-blue-900::after,
   .hero-fcard,
   .hero-v2-btn-primary,
   .hero-v2-btn-secondary { transition: none; }
+}
+
+/* ============================================
+   Mobile-only founder identity card (≤768px)
+   Hidden on desktop. Styled under both .mobile-founder-card AND
+   .hero-fcard-mobile-id so either class binds the rule.
+   ============================================ */
+.mobile-founder-card,
+.hero-fcard-mobile-id { display: none; }
+
+@media (max-width: 768px) {
+  /* free up bottom-left space so the new id card can center cleanly */
+  .hero-fcard-auto { display: none; }
+
+  .mobile-founder-card,
+  .hero-fcard-mobile-id {
+    display: flex !important;
+    align-items: center;
+    gap: 12px;
+    position: absolute;
+    left: 50%;
+    bottom: 28px;
+    transform: translateX(-50%);
+    z-index: 30;
+    width: 78%;
+    max-width: 360px;
+    padding: 14px 18px;
+    border-radius: 18px;
+    /* opaque enough that the card is visible even if backdrop-filter is ignored */
+    background: rgba(10, 18, 40, 0.88);
+    backdrop-filter: blur(16px) saturate(160%);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+    border: 1.5px solid rgba(59, 130, 246, 0.55);
+    box-shadow:
+      0 0 36px rgba(37, 99, 235, 0.55),
+      0 12px 28px -10px rgba(0, 0, 0, 0.6),
+      inset 0 1px 0 rgba(255, 255, 255, 0.14);
+    color: #fff;
+    pointer-events: none;
+    animation: mobileIdFloat 6.5s ease-in-out infinite;
+    will-change: transform;
+  }
+  .mobile-founder-card .hero-fcard-id-avatar,
+  .hero-fcard-mobile-id .hero-fcard-id-avatar {
+    width: 36px;
+    height: 36px;
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+  .mobile-founder-card .hero-fcard-id-name,
+  .hero-fcard-mobile-id .hero-fcard-id-name {
+    font-size: 14px;
+    font-weight: 700;
+  }
+  .mobile-founder-card .hero-fcard-id-role,
+  .hero-fcard-mobile-id .hero-fcard-id-role {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.7);
+  }
+}
+
+@keyframes mobileIdFloat {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50%      { transform: translateX(-50%) translateY(-5px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mobile-founder-card,
+  .hero-fcard-mobile-id { animation: none; }
 }
